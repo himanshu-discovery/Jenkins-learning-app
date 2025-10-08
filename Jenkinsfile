@@ -13,11 +13,10 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh '''
-                 musl google.com
                  ls -la
                  node --version
                  npm --version
-                 npm ci --no-audit --no-fund --loglevel=verbose
+                 npm ci --no-audit --no-fund --verbose
                  npm run build
                  ls -la
                  '''

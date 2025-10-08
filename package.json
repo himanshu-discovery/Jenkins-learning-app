@@ -10,7 +10,7 @@
     "jest-junit": "^16.0.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-scripts": "^0.0.0",
+    "react-scripts": "5.0.1",
     "web-vitals": "5.1.0"
   },
   "scripts": {
@@ -38,7 +38,7 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^24.7.0"
+    "@types/node": "^24.0.0"
   },
   "jest-junit": {
     "suiteName": "jest tests",
