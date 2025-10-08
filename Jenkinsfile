@@ -5,7 +5,7 @@ pipeline {
         stage('Build') {
             agent {
                     docker {
-                        image 'node:24-alpine'
+                        image 'node:24-alpine3.21'
                         reuseNode true
                         args '-p 3000:3000 --dns=8.8.8.8 --dns=8.8.4.4'
                     }
