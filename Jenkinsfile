@@ -8,12 +8,11 @@ pipeline {
                         image 'node:24-alpine'
                         reuseNode true
                         args '-p 3000:3000 --dns=8.8.8.8 --dns=8.8.4.4'
-
                     }
-                }
+            }
             steps {
-        echo 'Building... Diagnostic mode ON'
-        sh '''
+                echo 'Building... Diagnostic mode ON'
+                sh '''
           echo "---- /etc/resolv.conf inside container ----"
           cat /etc/resolv.conf || true
 
@@ -45,7 +44,7 @@ pipeline {
           echo "---- ls of workspace ----"
           ls -la
         '''
-      }
+            }
             steps {
                 echo 'Building...'
                 sh '''
@@ -60,8 +59,8 @@ pipeline {
             }
         }
     }
-    post { 
-        always { 
+    post {
+        always {
             archiveArtifacts artifacts: 'npm-ci.log,npm-ci-noaudit.log', allowEmptyArchive: true
             cleanWs()
         }
