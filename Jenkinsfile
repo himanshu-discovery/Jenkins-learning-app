@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh '''
-                 ping www.google.com -c 4 || true
+                 ping https://www.google.com/ -c 4 || true
                  ls -la
                  node --version
                  npm --version
