@@ -20,7 +20,7 @@ pipeline {
                 node --version
                 npm --version
                 if [ $? -ne 0 ]; then
-                    npm ci --no-audit --no-fund --legacy-peer-deps  --verbose || true
+                    npm ci --no-audit --no-fund --legacy-peer-deps  --verbose
                 fi
                 npm run build
                 ls -la
