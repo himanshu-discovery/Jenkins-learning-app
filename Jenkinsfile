@@ -7,6 +7,8 @@ pipeline {
                     docker {
                         image 'node:24-alpine'
                         reuseNode true
+                        args '-p 3000:3000'
+                        args '--dns=8.8.8.8 --dns=8.8.4.4'
 
                     }
                 }
