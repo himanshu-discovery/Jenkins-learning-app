@@ -11,15 +11,20 @@ pipeline {
                     }
             }
             steps {
-                echo 'Building...'
                 sh '''
-                 ls -la
-                 node --version
-                 npm --version
-                 npm ci --no-audit --no-fund --verbose
-                 npm run build
-                 ls -la
-                 '''
+                echo "---- container /etc/resolv.conf ----"
+                cat /etc/resolv.conf || true
+
+                tail -n 200 npm-ci*.log || true
+
+                echo 'Building...'
+                ls -la
+                node --version
+                npm --version
+                npm ci --no-audit --no-fund --verbose
+                npm run build
+                ls -la
+                '''
             }
         }
     }
