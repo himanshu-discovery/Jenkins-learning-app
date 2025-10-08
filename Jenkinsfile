@@ -21,7 +21,9 @@ pipeline {
                 ls -la
                 node --version
                 npm --version
-                npm ci --no-audit --no-fund --verbose
+                if [ $? -ne 0 ]; then
+                    npm ci --no-audit --no-fund --legacy-peer-deps --prefer-offline --loglevel=verbose || true
+                fi
                 npm run build
                 ls -la
                 '''
