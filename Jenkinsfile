@@ -16,7 +16,7 @@ pipeline {
                  ls -la
                  node --version
                  npm --version
-                 npm ci --verbose
+                 npm ci --no-audit --no-fund --loglevel=verbose
                  npm run build
                  ls -la
                  '''
