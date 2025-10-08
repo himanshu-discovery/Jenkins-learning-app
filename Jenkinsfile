@@ -15,7 +15,7 @@ pipeline {
             steps {
                 echo 'Building...'
                 sh '''
-                 curl -I google.com
+                 ping google.com
                  ls -la
                  node --version
                  npm --version
