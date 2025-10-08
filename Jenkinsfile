@@ -7,7 +7,7 @@ pipeline {
                     docker {
                         image 'node:24-alpine3.21'
                         reuseNode true
-                        args '-p 3000:3000 --dns=8.8.8.8 --dns=8.8.4.4 --network=install-jenkins-docker_jenkins'
+                        args '-p 3000:3000 --dns=8.8.8.8 --dns=8.8.4.4 --network=bridge'
                     }
             }
             steps {
