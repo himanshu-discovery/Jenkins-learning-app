@@ -7,15 +7,13 @@ pipeline {
                     docker {
                         image 'node:24-alpine3.21'
                         reuseNode true
-                        args '-p 3000:3000 --dns=8.8.8.8 --dns=8.8.4.4'
+                        args '-p 3000:3000 --dns=8.8.8.8 --dns=8.8.4.4 --network=jenkins_network'
                     }
             }
             steps {
                 sh '''
                 echo "---- container /etc/resolv.conf ----"
                 cat /etc/resolv.conf || true
-
-                tail -n 200 npm-ci*.log || true
 
                 echo 'Building...'
                 ls -la
