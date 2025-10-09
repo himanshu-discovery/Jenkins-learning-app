@@ -32,6 +32,7 @@ pipeline {
                 '''
                 // run npm with log capturing
                 sh '''
+                    npm i react-scripts
                     set -o pipefail
                     echo "Running npm ci (logs -> npm-ci.log and npm-ci-noaudit.log)..."
                     npm ci --no-audit --no-fund --legacy-peer-deps --verbose 2>&1 | tee npm-ci.log || true
