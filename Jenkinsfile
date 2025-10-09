@@ -3,7 +3,6 @@ pipeline {
 
     options {
         timeout(time: 45, unit: 'MINUTES')   // fail long-running builds
-        ansiColor('xterm')
     }
 
     stages {
