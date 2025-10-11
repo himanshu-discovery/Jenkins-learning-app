@@ -6,12 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Prepare') {
-            steps {
-                echo "Workspace: ${env.WORKSPACE}"
-                sh 'uname -a || true'
-            }
-        }
         stage('Build') {
             agent {
                     docker {
@@ -28,41 +22,6 @@ pipeline {
                     npm run build 2>&1 | tee npm-build.log
                     ls -la build || true
                 '''
-            }
-        }
-        stage('Debug Network') {
-            steps {
-                sh '''
-            echo "===== 🌐 Network Debug Info ====="
-
-            echo "🔹 Hostname:"
-            hostname
-
-            echo "\n🔹 Network Interfaces:"
-            ip addr show || true
-
-            echo "\n🔹 Default Gateway:"
-            ip route show default || true
-
-            echo "\n🔹 DNS Configuration (/etc/resolv.conf):"
-            cat /etc/resolv.conf || true
-
-            echo "\n🔹 Docker Network (via hostname inspection if Docker CLI available):"
-            docker inspect $(hostname) \
-                --format '{{json .NetworkSettings.Networks}}' \
-                2>/dev/null || echo "Docker not accessible in this container"
-
-            echo "\n🔹 Check IP Connectivity:"
-            ping -c 3 8.8.8.8 || echo "❌ Cannot reach 8.8.8.8"
-
-            echo "\n🔹 Check DNS Resolution:"
-            nslookup google.com 2>/dev/null || echo "❌ DNS resolution failed"
-
-            echo "\n🔹 Check HTTP Connection:"
-            curl -I https://registry.npmjs.org/ || echo "❌ Cannot reach registry.npmjs.org"
-
-            echo "=================================="
-        '''
             }
         }
     }
