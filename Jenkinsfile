@@ -20,40 +20,49 @@ pipeline {
                     }
             }
             steps {
-                 sh '''
-            apk add --no-cache iputils bind-tools || true
-            echo "Container Hostname: $(hostname)"
-            echo "Network Info:"
-            ip addr show
-            echo "DNS Config:"
-            cat /etc/resolv.conf
-            echo "Ping test:"
-            ping -c 3 8.8.8.8 || true
-        '''
-                sh '''
-                    echo "---- container /etc/resolv.conf ----"
-                    cat /etc/resolv.conf || true
-                    echo "---- dns lookup google ----"
-                    if command -v nslookup >/dev/null 2>&1; then nslookup google.com || true; fi
-                    echo "---- node & npm versions ----"
-                    node --version || true
-                    npm --version || true
-                '''
                 // run npm with log capturing
                 sh '''
-                    npm i react-scripts
-                    set -o pipefail
-                    echo "Running npm ci (logs -> npm-ci.log and npm-ci-noaudit.log)..."
-                    npm ci --no-audit --no-fund --legacy-peer-deps --verbose 2>&1 | tee npm-ci.log || true
-                    # If npm ci failed, also try with --no-audit as separate command and capture logs
-                    if [ $? -ne 0 ]; then
-                    npm ci --no-audit --no-fund --legacy-peer-deps 2>&1 | tee npm-ci-noaudit.log || true
-                    fi
-
+              
+                   npm ci
                     echo "Running build..."
                     npm run build 2>&1 | tee npm-build.log
                     ls -la build || true
                 '''
+            }
+        }
+        stage('Debug Network') {
+            steps {
+                sh '''
+            echo "===== 🌐 Network Debug Info ====="
+
+            echo "🔹 Hostname:"
+            hostname
+
+            echo "\n🔹 Network Interfaces:"
+            ip addr show || true
+
+            echo "\n🔹 Default Gateway:"
+            ip route show default || true
+
+            echo "\n🔹 DNS Configuration (/etc/resolv.conf):"
+            cat /etc/resolv.conf || true
+
+            echo "\n🔹 Docker Network (via hostname inspection if Docker CLI available):"
+            docker inspect $(hostname) \
+                --format '{{json .NetworkSettings.Networks}}' \
+                2>/dev/null || echo "Docker not accessible in this container"
+
+            echo "\n🔹 Check IP Connectivity:"
+            ping -c 3 8.8.8.8 || echo "❌ Cannot reach 8.8.8.8"
+
+            echo "\n🔹 Check DNS Resolution:"
+            nslookup google.com 2>/dev/null || echo "❌ DNS resolution failed"
+
+            echo "\n🔹 Check HTTP Connection:"
+            curl -I https://registry.npmjs.org/ || echo "❌ Cannot reach registry.npmjs.org"
+
+            echo "=================================="
+        '''
             }
         }
     }
