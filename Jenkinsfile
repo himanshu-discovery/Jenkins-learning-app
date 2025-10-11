@@ -20,7 +20,7 @@ pipeline {
                     }
             }
             steps {
-                sh '''
+                 sh '''
             apk add --no-cache iputils bind-tools || true
             echo "Container Hostname: $(hostname)"
             echo "Network Info:"
@@ -30,8 +30,6 @@ pipeline {
             echo "Ping test:"
             ping -c 3 8.8.8.8 || true
         '''
-            }
-            steps {
                 sh '''
                     echo "---- container /etc/resolv.conf ----"
                     cat /etc/resolv.conf || true
