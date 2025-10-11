@@ -29,6 +29,12 @@ pipeline {
         always {
             echo 'Archiving logs and cleaning workspace'
             archiveArtifacts artifacts: 'npm-ci.log,npm-ci-noaudit.log', allowEmptyArchive: true
+              sh '''
+                echo "docker ps -a (host):" || true
+                docker ps -a || true
+                echo "docker network ls (host):" || true
+                docker network ls || true
+            '''
             cleanWs()
         }
         failure {
