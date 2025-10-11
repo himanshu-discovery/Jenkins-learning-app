@@ -17,8 +17,19 @@ pipeline {
                     docker {
                         image 'node:24-alpine3.21'
                         reuseNode true
-                        args '-u node:node'
                     }
+            }
+            steps {
+                sh '''
+            apk add --no-cache iputils bind-tools || true
+            echo "Container Hostname: $(hostname)"
+            echo "Network Info:"
+            ip addr show
+            echo "DNS Config:"
+            cat /etc/resolv.conf
+            echo "Ping test:"
+            ping -c 3 8.8.8.8 || true
+        '''
             }
             steps {
                 sh '''
