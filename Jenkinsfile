@@ -52,9 +52,10 @@ pipeline {
     }
     post {
         always {
+            junit 'test-results/junit.xml'
             echo 'Archiving logs and cleaning workspace'
             archiveArtifacts artifacts: 'npm-ci.log,npm-ci-noaudit.log', allowEmptyArchive: true
-            cleanWs()
+
         }
         failure {
             echo 'Pipeline failed. Printing docker/container diagnostics (if available)...'
