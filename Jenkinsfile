@@ -36,7 +36,11 @@ pipeline {
                             echo "❌ File build/index.html does NOT exist!"
                             exit 1
                         fi
+
+                        npm test
                     '''
+
+
             }
         }
     }
