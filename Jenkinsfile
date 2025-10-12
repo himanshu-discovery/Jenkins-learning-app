@@ -25,14 +25,14 @@ pipeline {
             }
         }
         stage('Test') {
-             agent {
+            agent {
                     docker {
                         image 'node:24-alpine3.21'
                         reuseNode true
                     }
             }
             steps {
-                echo "Test stage"
+                echo 'Test stage'
 
                     sh '''
                         echo "🔍 Checking if build/index.html exists..."
@@ -47,11 +47,10 @@ pipeline {
                         npm run test
                     '''
 
-
             }
         }
-         stage('E2E Test') {
-             agent {
+        stage('E2E Test') {
+            agent {
                     docker {
                         image 'mcr.microsoft.com/playwright:v1.56.0-noble'
                         reuseNode true
@@ -59,11 +58,11 @@ pipeline {
                     }
             }
             steps {
-                echo "Test stage"
+                echo 'Test stage'
 
                     sh '''
                        npm install serve
-                       node_modules/.bin/serve -s build & 
+                       node_modules/.bin/serve -s build &
                        sleep 10
                        npx playwright test --reporter=html
                     '''
@@ -73,11 +72,20 @@ pipeline {
     post {
         always {
             junit 'jest-results/junit.xml'
-            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, icon: '', keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Playwright HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+            publishHTML([
+                allowMissing: false,
+                alwaysLinkToLastBuild: false,
+                icon: '',
+                keepAll: false,
+                reportDir: 'playwright-report',
+                reportFiles: 'index.html',
+                reportName: 'Playwright HTML Report',
+                reportTitles: '',
+                useWrapperFileDirectly: true
+            ])
             echo 'Archiving logs and cleaning workspace'
-            
-            archiveArtifacts artifacts: 'npm-ci.log,npm-ci-noaudit.log', allowEmptyArchive: true
 
+            archiveArtifacts artifacts: 'npm-ci.log,npm-ci-noaudit.log', allowEmptyArchive: true
         }
         failure {
             echo 'Pipeline failed. Printing docker/container diagnostics (if available)...'
@@ -89,5 +97,4 @@ pipeline {
             '''
         }
     }
-    
 }
