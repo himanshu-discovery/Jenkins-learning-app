@@ -72,7 +72,7 @@ pipeline {
     }
     post {
         always {
-            junit 'test-results/junit.xml'
+            junit 'jest-results/junit.xml'
             echo 'Archiving logs and cleaning workspace'
             archiveArtifacts artifacts: 'npm-ci.log,npm-ci-noaudit.log', allowEmptyArchive: true
 
