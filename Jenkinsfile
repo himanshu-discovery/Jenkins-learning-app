@@ -26,10 +26,19 @@ pipeline {
         stage('Test') {
             steps {
                 echo "Test stage"
-            }
 
+        sh '''
+            echo "🔍 Checking if build/index.html exists..."
+
+            if [ -f build/index.html ]; then
+                echo "✅ File build/index.html exists."
+            else
+                echo "❌ File build/index.html does NOT exist!"
+                exit 1
+            fi
+        ''
+            }
         }
-    }
     post {
         always {
             echo 'Archiving logs and cleaning workspace'
@@ -46,4 +55,4 @@ pipeline {
             '''
         }
     }
-}
+    }
