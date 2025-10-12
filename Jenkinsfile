@@ -39,6 +39,7 @@ pipeline {
                     '''
             }
         }
+    }
     post {
         always {
             echo 'Archiving logs and cleaning workspace'
@@ -55,5 +56,5 @@ pipeline {
             '''
         }
     }
-    }
+    
 }
