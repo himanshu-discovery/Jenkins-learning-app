@@ -16,20 +16,25 @@ pipeline {
             steps {
                 // run npm with log capturing
                 sh '''
-              
-                   npm ci
+                    npm ci
                     echo "Running build..."
                     npm run build 2>&1 | tee npm-build.log
                     ls -la build || true
                 '''
             }
         }
+        stage('Test') {
+            steps {
+                echo "Test stag"
+            }
+
+        }
     }
     post {
         always {
             echo 'Archiving logs and cleaning workspace'
             archiveArtifacts artifacts: 'npm-ci.log,npm-ci-noaudit.log', allowEmptyArchive: true
-              sh '''
+            sh '''
                 echo "docker ps -a (host):" || true
                 docker ps -a || true
                 echo "docker network ls (host):" || true
