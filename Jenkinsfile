@@ -37,7 +37,7 @@ pipeline {
                             exit 1
                         fi
 
-                        npm test
+                        npm run test
                     '''
 
 
