@@ -63,7 +63,7 @@ pipeline {
 
                     sh '''
                        npm install serve
-                       node_modules/.bin/serve -s build -l 3000
+                       node_modules/.bin/serve -s build
                        npx playwright test
                     '''
 
