@@ -6,6 +6,7 @@ pipeline {
     }
 
     stages {
+        // This is a build Stage container commented out for now
         stage('Build') {
             agent {
                     docker {
@@ -44,6 +45,26 @@ pipeline {
                         fi
 
                         npm run test
+                    '''
+
+
+            }
+        }
+         stage('E2E Test') {
+             agent {
+                    docker {
+                        image 'mcr.microsoft.com/playwright:v1.56.0-noble'
+                        reuseNode true
+                        args ''
+                    }
+            }
+            steps {
+                echo "Test stage"
+
+                    sh '''
+                       npm install serve
+                       node_modules/.bin/serve -s build -l 3000
+                       npx playwright test
                     '''
 
 
