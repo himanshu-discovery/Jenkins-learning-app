@@ -24,17 +24,19 @@ pipeline {
                 '''
             }
         }
-        stage('Test') {
-            agent {
-                    docker {
-                        image 'node:24-alpine3.21'
-                        reuseNode true
+        stage('Run Tests') {
+            parallel {
+                stage('Test') {
+                    agent {
+                        docker {
+                            image 'node:24-alpine3.21'
+                            reuseNode true
+                        }
                     }
-            }
-            steps {
-                echo 'Test stage'
+                    steps {
+                        echo 'Test stage'
 
-                    sh '''
+                        sh '''
                         echo "🔍 Checking if build/index.html exists..."
 
                         if [ -f build/index.html ]; then
@@ -46,26 +48,27 @@ pipeline {
 
                         npm run test
                     '''
-
-            }
-        }
-        stage('E2E Test') {
-            agent {
-                    docker {
-                        image 'mcr.microsoft.com/playwright:v1.56.0-noble'
-                        reuseNode true
-                        args ''
                     }
-            }
-            steps {
-                echo 'Test stage'
+                }
+                stage('E2E Test') {
+                    agent {
+                        docker {
+                            image 'mcr.microsoft.com/playwright:v1.56.0-noble'
+                            reuseNode true
+                            args ''
+                        }
+                    }
+                    steps {
+                        echo 'Test stage'
 
-                    sh '''
+                        sh '''
                        npm install serve
                        node_modules/.bin/serve -s build &
                        sleep 10
                        npx playwright test --reporter=html
                     '''
+                    }
+                }
             }
         }
     }
